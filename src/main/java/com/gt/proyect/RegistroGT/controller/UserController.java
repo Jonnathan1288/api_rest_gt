@@ -2,12 +2,14 @@ package com.gt.proyect.RegistroGT.controller;
 
 import com.gt.proyect.RegistroGT.model.Usuario;
 import com.gt.proyect.RegistroGT.service.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @CrossOrigin(origins = {"*"})
@@ -59,7 +61,7 @@ public class UserController {
        Usuario usuarioUp = userService.findById(id);
 
             if(usuarioUp == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se a podido encontrar a este usuario");
             }else{
                 try {
                     usuarioUp.setNombre(usuario.getNombre());
