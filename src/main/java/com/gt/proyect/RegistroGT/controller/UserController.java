@@ -60,20 +60,18 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody Usuario usuario, @PathVariable("id") Integer id){
        Usuario usuarioUp = userService.findById(id);
 
-            if(usuarioUp == null){
-                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se a podido encontrar a este usuario");
-            }else{
-                try {
-                    usuarioUp.setNombre(usuario.getNombre());
-                    usuarioUp.setClave(usuario.getClave());
-                    usuarioUp.setEmail(usuario.getEmail());
-                    usuarioUp.setEstado(usuario.getEstado());
-                    return new ResponseEntity<>(userService.save(usuarioUp), HttpStatus.CREATED);
-                }catch (Exception e){
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-
-
+       if(usuarioUp == null){
+           return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se a podido encontrar a este usuario");
+       }else{
+           try {
+               usuarioUp.setNombre(usuario.getNombre());
+               usuarioUp.setClave(usuario.getClave());
+               usuarioUp.setEmail(usuario.getEmail());
+               usuarioUp.setEstado(usuario.getEstado());
+               return new ResponseEntity<>(userService.save(usuarioUp), HttpStatus.CREATED);
+           }catch (Exception e){
+               return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+           }
+       }
     }
 }
