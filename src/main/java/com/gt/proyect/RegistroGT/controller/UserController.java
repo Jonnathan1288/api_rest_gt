@@ -1,31 +1,43 @@
 package com.gt.proyect.RegistroGT.controller;
 
 import com.gt.proyect.RegistroGT.model.Usuario;
+
+import com.gt.proyect.RegistroGT.service.S3Service;
 import com.gt.proyect.RegistroGT.service.UserService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = {"*"})
-@RequestMapping("/api")
+@RequestMapping("/api/usuario")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user/getAll")
-    public ResponseEntity<List<Usuario>> getAll(){
-        try {
-            return ResponseEntity.ok(userService.findByAll());
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @Autowired
+    private S3Service s3Service;
+
+    @GetMapping
+    List<Usuario> getAll(){
+        return userService.findByAll()
+                .stream()
+                .peek(curso -> curso.setImagenUrl(s3Service.getObjectUrl(curso.getImagenPath())))
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    Usuario create(@RequestBody Usuario curso) {
+        //return cursoRepository.save(curso);
+        userService.save(curso);
+        curso.setImagenUrl(s3Service.getObjectUrl(curso.getImagenPath()));
+        curso.setCedulaUrl(s3Service.getObjectUrl(curso.getCedulaPath()));
+        return curso;
     }
 
     @GetMapping("/user/findId/{id}")

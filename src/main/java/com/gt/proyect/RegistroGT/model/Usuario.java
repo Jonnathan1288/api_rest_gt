@@ -1,20 +1,19 @@
 package com.gt.proyect.RegistroGT.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Setter
-@Getter
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "usuarios")
-public class Usuario implements Serializable {
+public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
-    private Integer id_user;
+    @GeneratedValue
+    private Integer id;
 
     @Column(name = "nombre")
     private String nombre;
@@ -27,5 +26,17 @@ public class Usuario implements Serializable {
 
     @Column(name = "estado")
     private Boolean estado;
+
+    @NonNull
+    private String titulo;
+
+    private String imagenPath;
+    private String cedulaPath;
+
+    @Transient
+    private String imagenUrl;
+
+    @Transient
+    private String cedulaUrl;
 
 }
